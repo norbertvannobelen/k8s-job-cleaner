@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"time"
 
 	batchV1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,7 +34,7 @@ func main() {
 // Trigger brute force filter for failures, with risk of out of memory. By removing completed jobs first, this risk is reduced
 // Risk of out of memory is also managed by the whole reason of this program: Hitting a 10k job limit
 func cleanJobs(namespace string) {
-	removeJobs(namespace, "status.successful==1")
+	removeJobs(namespace, "status.successful=1")
 	removeJobs(namespace, "")
 }
 
@@ -77,7 +76,7 @@ func removePods(namespace string, filter string) {
 		// inspect pod status:
 		log.Printf("INFO: cleanPods(): pod %s with status %s removed", x.Name, x.Status.Phase)
 		if err := clientset.CoreV1().Pods(namespace).Delete(x.Name, &metav1.DeleteOptions{}); err != nil {
-			log.Printf("INFO: cleanPods(): failed to delete job %s. Error %v", x.Name, err)
+			log.Printf("INFO: cleanPods(): failed to delete pod %s. Error %v", x.Name, err)
 		}
 	}
 }
