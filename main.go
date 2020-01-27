@@ -28,9 +28,7 @@ func init() {
 
 func main() {
 	cleanJobs(os.Getenv("NAMESPACE"))
-	time.Sleep(time.Second * 10)
 	cleanPods(os.Getenv("NAMESPACE"))
-	time.Sleep(time.Minute)
 }
 
 // cleanJobs - Filters for successful completions
